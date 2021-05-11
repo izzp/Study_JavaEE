@@ -25,5 +25,8 @@ public class Main {
 		lists.add(new Object[]{"李白","111111"});
 		lists.add(new Object[]{"杜甫","222222"});
 		userDao.batchUpdateUser(lists);
+		
+		int usercount = userDao.getCount("张三");
+		System.out.println("这是查询数量的结果："+usercount);
 	}
 }

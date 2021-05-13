@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace:与接口绑定，接口的全类名 -->
+<mapper namespace="mezzp">
+	<!-- 创建查询语句： id：与接口中的查询方法相同 resultType：查询结果类型（全类名） #{id}：获取参数值 -->
+	<select id="getUserById" resultType="com.mezzp.bean.User">
+		select * from users where id
+		= #{id}
+	</select>
+
+</mapper>

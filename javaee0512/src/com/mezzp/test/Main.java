@@ -8,7 +8,7 @@ import com.mezzp.service.BookShopService;
 public class Main {
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring-tx.xml");
-		BookShopService bookShopService =context.getBean("bookShopService",BookShopService.class);
-		
+		BookShopService bookShopService =context.getBean("bookShopServiceImpl",BookShopService.class);
+		bookShopService.buyBook("1002");
 	}
 }

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <properties resource="db.properties"></properties>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+    <typeAliases>
+        <package name="com.mezzp.bean"/>
+    </typeAliases>
+    <!-- 配置数据库的连接信息 -->
+    <environments default="development">
+
+        <environment id="development">
+            <!-- 事务管理器 -->
+            <transactionManager type="JDBC"/>
+            <!-- 连接池 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver's}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.user}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+
+    </environments>
+    <!-- 引入sql映射文件 -->
+    <mappers>
+        <mapper class="com.mezzp.dao.UserMapper"/>
+    </mappers>
+
+</configuration>

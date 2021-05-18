@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace:与接口绑定，接口的全类名 -->
+<mapper namespace="com.mezzp.dao.UserMapper">
+    <select id="getUserById" resultMap="userResultMap">
+        <!--方式一，二-->
+       <!--select u.id,u.user_name,u.age,a.id aid,a.province,a.city from user_tb u,address_tb a
+        where u.add_id=a.id and u.id=#{id}-->
+        <!--方式三.分步查询-->
+        select id,user_name,age,add_id from test0518.user_tb where id=#{id}
+    </select>
+    <resultMap id="userResultMap" type="com.mezzp.bean.User">
+        <id column="id" property="id"></id>
+        <result column="user_name" property="userName"></result>
+        <result column="age" property="age"></result>
+        <!--方式一.级联方式-->
+<!--        <result column="aid" property="address.id"></result>-->
+<!--        <result column="province" property="address.province"></result>-->
+<!--        <result column="city" property="address.city"></result>-->
+        <!--方式二.association-->
+<!--        <association property="address" javaType="com.mezzp.bean.Address">-->
+<!--            <id column="aid" property="id"/>-->
+<!--            <result column="province" property="province"/>-->
+<!--            <result column="city" property="city"/>-->
+<!--        </association>-->
+        <!--方式三.分步查询-->
+        <association property="address" select="com.mezzp.dao.AddressMapper.getAddressById" column="add_id">
+        </association>
+    </resultMap>
+</mapper>

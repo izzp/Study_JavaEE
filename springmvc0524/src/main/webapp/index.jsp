@@ -6,10 +6,20 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
+<head>
     <title>主页</title>
-  </head>
-  <body>
- <h1> <a href="hello">helloworld</a></h1>
-  </body>
+</head>
+<body>
+<form action="order" method="post">
+    <input type="hidden" name="_method" value="put"/>
+    <input type="submit" value="update"/>
+</form>
+<form action="order/1001" method="post">
+    <input type="hidden" name="_method" value="delete"/>
+    <input type="submit" value="delete"/>
+</form>
+<br>
+<a href="order/1001">get order</a>
+<a href="hello">hello</a>
+</body>
 </html>

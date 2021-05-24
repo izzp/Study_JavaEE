@@ -118,8 +118,8 @@
     </dependencies>
 
     <build>
-        <!--jetty-->
         <finalName>springmvc0524</finalName>
+        <!--jetty-->
         <plugins>
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
@@ -128,7 +128,7 @@
                 <configuration>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <webApp>
-                        <contextPath>/springmvc0524/</contextPath>
+                        <contextPath>/springmvc0524</contextPath>
                     </webApp>
                     <httpConnector>
                         <port>8888</port>

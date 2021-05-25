@@ -12,7 +12,8 @@
 <body>
 <h1>success</h1>
 handle2 --> username:<%=request.getAttribute("username")%><br/>
-handle2 --> username:${requestScope.username} <hr/>
+handle2 --> username:${requestScope.username} <br/>
+handle2 --> age:${requestScope.age} <hr/>
 handle3 --> username:${requestScope.username} --> 简写方式找到的 --> ${username}<br/>
 handle3 --> password:${password} <br/>
 

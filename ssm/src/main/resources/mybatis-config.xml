@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <settings>
+        <!-- 下划线映射驼峰的属性名 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+    <!-- bean包中的类起别名：类名首字母小写 -->
+    <typeAliases>
+        <package name="com.mezzp.bean"/>
+    </typeAliases>
+
+</configuration>

@@ -2,6 +2,7 @@ package com.mezzp.handler;
 
 import com.mezzp.bean.Employee;
 import com.mezzp.service.EmployeeService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import java.util.Map;
  */
 @Controller
 public class EmployeeHandler {
+    static Logger logger = Logger.getLogger(EmployeeHandler.class);
     @Autowired
     EmployeeService employeeService;
 
@@ -24,7 +26,7 @@ public class EmployeeHandler {
     public String listEmps(Map<String, Object> map) {
         List<Employee> employees = employeeService.getAllEmployees();
         map.put("employees", employees);
-        System.out.println("-----listEmps--200-----");
+        logger.info("listEmps--200");
         return "listemps";
     }
 }

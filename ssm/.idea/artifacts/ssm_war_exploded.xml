@@ -35,7 +35,7 @@
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.5.6" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:1.5.6" />
           <element id="library" level="project" name="Maven: jstl:jstl:1.2" />
-          <element id="library" level="project" name="Maven: org.apache.taglibs:taglibs-standard-impl:1.2.5" />
+          <element id="library" level="project" name="Maven: taglibs:standard:1.1.2" />
         </element>
       </element>
       <element id="directory" name="META-INF">

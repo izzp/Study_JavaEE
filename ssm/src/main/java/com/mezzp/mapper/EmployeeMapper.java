@@ -10,10 +10,11 @@ import java.util.List;
  * @version 1.0
  * @date 2021/5/27
  */
+
 public interface EmployeeMapper {
     /**
      * 获取所有的Employee信息
-     * @return
+     * @return 所有的Employee信息
      */
-    List<Employee> getALLEmps();
+    List<Employee> getAllEmps();
 }

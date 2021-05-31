@@ -4,7 +4,16 @@
 
 <!-- namespace:与接口绑定，接口的全类名 -->
 <mapper namespace="com.mezzp.mapper.EmployeeMapper">
-    <select id="getAllEmployees" resultType="com.mezzp.bean.Employee">
-        select * from sms.employee
+    <select id="getAllEmps" resultMap="empResultMap">
+        select *
+        from ssm.employee
     </select>
+    <resultMap id="empResultMap" type="employee">
+        <id column="emp_id" property="empId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="gender" property="gender"/>
+        <result column="email" property="email"/>
+        <association property="department" select="com.mezzp.mapper.DepartmentMapper.getDepById"
+                     column="dep_id"/>
+    </resultMap>
 </mapper>

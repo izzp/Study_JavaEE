@@ -1,4 +1,4 @@
-package com.mezzp.mapper.impl;
+package com.mezzp.service.impl;
 
 import com.mezzp.bean.Employee;
 import com.mezzp.mapper.EmployeeMapper;
@@ -22,8 +22,10 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Autowired
     EmployeeMapper employeeMapper;
+
     @Override
     public List<Employee> getAllEmployees() {
-        return null;
+        List<Employee> employees = employeeMapper.getAllEmps();
+        return employees;
     }
 }

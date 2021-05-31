@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
 
     <!-- 组件扫面：除了控制器之外的所有组件 -->
-    <context:component-scan base-package="com.mezzp">
+    <context:component-scan base-package="com.mezzp" use-default-filters="true">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
     <!-- c3p0连接池数据源的配置 -->
     <!-- 读取外部属性文件 -->
-    <context:property-placeholder location="classpath*:db.properties"/>
+    <context:property-placeholder location="classpath:db.properties"/>
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="${jdbc.driver}"/>
         <property name="jdbcUrl" value="${jdbc.url}"/>
@@ -22,13 +22,14 @@
         <!-- 引入数据源 -->
         <property name="dataSource" ref="dataSource"/>
         <!-- 引入mybatis的全局配置文件 -->
-        <property name="configLocation" value="classpath*:mybatis-config.xml"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
         <!-- 引入sql映射文件 -->
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>
     </bean>
     <!-- 2.配置mapper接口的代理实现类 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.mezzp.mapper"/>
+        <property name="basePackage" value="com.mezzp.mapper"></property>
     </bean>
-    <!-- 或者用这个直接生成 <mybatis-spring:scan base-package="com.mezzp.mapper"/> -->
+    <!-- 或者用这个直接生成-->
+    <!-- <mybatis-spring:scan base-package="com.mezzp.mapper"/>-->
 </beans>

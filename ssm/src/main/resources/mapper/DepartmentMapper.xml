@@ -3,5 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- namespace:与接口绑定，接口的全类名 -->
-<mapper namespace="com.mezzp.mapper.DepartmentMapperr">
+<mapper namespace="com.mezzp.mapper.DepartmentMapper">
+    <select id="getDepById" resultType="department">
+        select *
+        from ssm.department
+        where dep_id = #{id}
+    </select>
 </mapper>

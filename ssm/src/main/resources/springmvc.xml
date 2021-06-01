@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="
                   http://www.springframework.org/schema/beans
                   http://www.springframework.org/schema/beans/spring-beans.xsd
                   http://www.springframework.org/schema/context
-                  http://www.springframework.org/schema/context/spring-context.xsd">
+                  http://www.springframework.org/schema/context/spring-context.xsd
+                  http://www.springframework.org/schema/mvc
+                  http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
     <!-- 组件扫描：@Controller组件 -->
     <context:component-scan base-package="com.mezzp.handler"/>
     <!-- 视图解析器 -->
@@ -14,4 +16,6 @@
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+    <mvc:default-servlet-handler/>
+    <mvc:annotation-driven/>
 </beans>

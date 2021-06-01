@@ -31,4 +31,23 @@ public interface EmployeeService {
      * @param employee employee信息
      */
     void addEmp(Employee employee);
+
+    /**
+     * 删除员工
+     * @param empId empId
+     */
+    void delEmp(Integer empId);
+
+    /**
+     * 查询员工信息
+     * @param empId empId
+     * @return Employee
+     */
+    Employee getEmp(Integer empId);
+
+    /**
+     * 修改员工信息
+     * @param employee employee
+     */
+    void updateEmp(Employee employee);
 }

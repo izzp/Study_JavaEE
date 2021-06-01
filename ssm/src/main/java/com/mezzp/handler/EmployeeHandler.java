@@ -6,6 +6,7 @@ import com.mezzp.service.EmployeeService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -47,16 +48,49 @@ public class EmployeeHandler {
         employee.setEmpName("xxx");
         employee.setGender(1);
         employee.setEmail("xxx@sina.com");
-        Department department=new Department();
+        Department department = new Department();
         department.setDepId(102);
         employee.setDepartment(department);
 
-        map.put("command", employee);
+        map.put("employee", employee);
+
         return "addemp";
     }
+
     @RequestMapping("/emp")
-    public String addEmp(Employee employee){
+    public String addEmp(Employee employee) {
         employeeService.addEmp(employee);
+        return "redirect:/emps";
+    }
+
+    @RequestMapping(value = "/emp/{id}", method = RequestMethod.DELETE)
+    public String delEmp(@PathVariable("id") Integer empId) {
+        employeeService.delEmp(empId);
+        return "redirect:/emps";
+    }
+
+    @RequestMapping(value = "/emp/{id}", method = RequestMethod.GET)
+    public String toEditEmp(@PathVariable("id") Integer empId, Map<String, Object> map) {
+        Map<String, String> genders = new HashMap<>();
+        genders.put("0", "女");
+        genders.put("1", "男");
+        genders.put("2", "保密");
+        map.put("genders", genders);
+
+        List<Department> departments = employeeService.getAllDeps();
+        System.out.println(departments);
+        map.put("departments", departments);
+
+        Employee employee = employeeService.getEmp(empId);
+
+        map.put("employee", employee);
+
+        return "addemp";
+    }
+
+    @RequestMapping(value = "/emp", method = RequestMethod.PUT)
+    public String updateEmp(Employee employee) {
+        employeeService.updateEmp(employee);
         return "redirect:/emps";
     }
 }

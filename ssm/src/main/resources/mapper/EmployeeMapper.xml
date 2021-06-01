@@ -16,8 +16,30 @@
         <association property="department" select="com.mezzp.mapper.DepartmentMapper.getDepById"
                      column="dep_id"/>
     </resultMap>
-    <!--    addEmp-->
+    <!-- addEmp -->
     <insert id="addEmp">
-        insert into ssm.employee (emp_name, gender, email, dep_id) value (#{empName},#{gender},#{email},#{department.depId})
+        insert into ssm.employee (emp_name, gender, email, dep_id) value (#{empName}, #{gender}, #{email}, #{department.depId})
     </insert>
+    <!--  delEmpById  -->
+    <delete id="delEmpById">
+        delete
+        from ssm.employee
+        where emp_id = #{empId}
+    </delete>
+    <!--  Employee getEmpById(Integer empId) -->
+    <select id="getEmpById" resultMap="empResultMap">
+        select emp_id, emp_name, gender, email, dep_id
+        from ssm.employee
+        where emp_id = #{id}
+    </select>
+
+    <!-- void updateEmp(Employee employee) -->
+    <update id="updateEmp">
+        update ssm.employee
+        set emp_name=#{empName},
+            gender=#{gender},
+            email=#{email},
+            dep_id=#{department.depId}
+        where emp_id = #{empId}
+    </update>
 </mapper>

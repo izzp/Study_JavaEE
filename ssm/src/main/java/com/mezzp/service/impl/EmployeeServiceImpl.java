@@ -1,6 +1,8 @@
 package com.mezzp.service.impl;
 
+import com.mezzp.bean.Department;
 import com.mezzp.bean.Employee;
+import com.mezzp.mapper.DepartmentMapper;
 import com.mezzp.mapper.EmployeeMapper;
 import com.mezzp.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,23 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Autowired
     EmployeeMapper employeeMapper;
+    @Autowired
+    DepartmentMapper departmentMapper;
 
     @Override
     public List<Employee> getAllEmployees() {
         List<Employee> employees = employeeMapper.getAllEmps();
         return employees;
+    }
+
+    @Override
+    public List<Department> getAllDeps() {
+        List<Department> departments= departmentMapper.getAllDeps();
+        return departments;
+    }
+
+    @Override
+    public void addEmp(Employee employee) {
+        employeeMapper.addEmp(employee);
     }
 }

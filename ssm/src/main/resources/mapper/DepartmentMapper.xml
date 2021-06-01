@@ -9,4 +9,9 @@
         from ssm.department
         where dep_id = #{id}
     </select>
+    <!-- getAllDeps -->
+    <select id="getAllDeps" resultType="department">
+        select *
+        from ssm.department
+    </select>
 </mapper>

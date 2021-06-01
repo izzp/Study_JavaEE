@@ -7,6 +7,11 @@
     <settings>
         <!-- 下划线映射驼峰的属性名 -->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 延迟加载 -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+        <!-- 配置开启2级缓存机制 -->
+        <setting name="cacheEnabled" value="true"/>
         <!-- 打印查询语句 -->
         <setting name="logImpl" value="LOG4J"/>
     </settings>

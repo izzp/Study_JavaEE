@@ -16,4 +16,8 @@
         <association property="department" select="com.mezzp.mapper.DepartmentMapper.getDepById"
                      column="dep_id"/>
     </resultMap>
+    <!--    addEmp-->
+    <insert id="addEmp">
+        insert into ssm.employee (emp_name, gender, email, dep_id) value (#{empName},#{gender},#{email},#{department.depId})
+    </insert>
 </mapper>

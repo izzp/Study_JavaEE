@@ -8,14 +8,16 @@
 <html>
 <head>
     <title>主页</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/css/bootstrap.min.css"/>
     <style type="text/css">
-        a{
-            text-decoration: none;
+        body{
+            text-align: center;
+            margin-top: 10%;
         }
     </style>
 </head>
 <body>
-<a href="emps">显示所有emps</a>
+<a class="btn btn-success" href="emps" role="button">显示所有emps</a>
 <br/>
 </body>
 </html>

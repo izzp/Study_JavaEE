@@ -34,5 +34,6 @@
         </tr>
     </c:forEach>
 </table>
+<a class="btn btn-success" href="toAddEmp" role="button">add new employee</a>
 </body>
 </html>

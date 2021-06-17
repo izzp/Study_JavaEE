@@ -1,8 +1,110 @@
 # JavaEE头歌
 
+
 ## SSM—Spring部分
 
 ### Spring—初体验
+
+#### 第1关：new创建对象
+
+User.java
+
+```java
+package step1;
+
+public class User {
+	private String userName;
+	//无参构造方法
+	//=====================begin====================
+	public User() {
+		
+	}
+	//======================end=====================
+	
+	//userName的getter方法
+	//=====================begin====================
+	public String getUserName() {
+		return userName;
+	}
+	//======================end=====================
+	
+	//userName的setter方法
+	//======================end=====================
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	//======================end=====================
+	
+	//重写父类Object的toString方法
+	//=====================begin====================
+	@Override
+	public String toString() {
+		return "User [userName=" + userName + "]";
+	}
+	//======================end=====================
+}
+
+```
+
+Main.java
+
+```java
+package step1;
+
+public class Main {
+	public static void main(String[] args) {
+		//手动调用User的无参构造方法，创建对象user
+		//调用setUser方法为属性userName赋值为"李商隐"
+		//=====================begin====================
+        User user = new User();
+        user.setUserName("李商隐");
+		//======================end=====================
+		//输出user对象
+		System.out.println(user);
+	}
+}
+```
+
+#### 第2关：Spring创建对象
+
+applicationContext.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- bean配置：class为User，id为user，userName属性值为Tom -->
+	<!-- ==============begin============== -->
+	<bean id="user"  class="step2.User">
+    <property name="userName" value="Tom"></property>
+    </bean>
+	<!-- ============== end ============== -->
+</beans>
+```
+
+Main.java
+
+```java
+package step2;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Main {
+	public static void main(String[] args) {
+		//创建IoC容器对象;通过IoC容器获取id为user的对象
+		//=====================begin====================
+		ApplicationContext cxt = 
+            new ClassPathXmlApplicationContext("applicationContext.xml");
+		User user = cxt.getBean("user",User.class);
+		//======================end=====================
+		//输出user对象
+		System.out.println(user);
+	}
+}
+```
 
 ### Spring——AOP
 
@@ -261,6 +363,306 @@ public void buyBook(String isbn){
 
 ###  Spring—IoC
 
+#### 第1关：DI注入方式
+
+Main.java
+
+```java
+package step1;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Main {
+	public static void main(String[] args) {
+        //创建IoC容器，获取id为person的对象
+        //=====================begin======================
+        ApplicationContext cxt = new ClassPathXmlApplicationContext("spring-di.xml");
+        Person person = cxt.getBean("person",Person.class);
+        //======================end=======================
+		
+        //输出显示person的各个属性值
+		System.out.println("name:" + person.getName());
+		System.out.println("cars:" + person.getCars());
+		System.out.println("addresses:" + person.getAddresses());		
+	}
+}
+```
+
+spring-di.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+	
+	<!-- bean配置：Car类型，id为car1，car1的brand属性值为"大众"，price属性值为210000，speed属性值为60 -->
+	<!-- ===============begin=============== -->
+	<bean id="car1" class="step1.Car">
+		<property name="brand" value="大众"></property>
+		<property name="price" value="210000"></property>
+		<property name="speed" value="60"></property>
+	</bean>
+	<!-- ================end================ -->
+	
+	<!-- bean配置：Car类型，id为car2，car2的brand属性值为"HAVAL"，price属性值为130000，speed属性值为100 -->
+	<!-- ===============begin=============== -->
+	 <bean id="car2" class="step1.Car" >
+        <property name="brand" value="HAVAL"></property>
+		<property name="price" value="130000"></property>
+		<property name="speed" value="100"></property>
+     </bean>
+	<!-- ================end================ -->
+	
+	<!-- bean配置：Address类型，id为address1，address1的city属性值为"成都"，street属性值为"三岔街道" -->
+	<!-- ===============begin=============== -->
+	<bean id="address1" class="step1.Address">
+		<property name="city" value="成都"></property>
+		<property name="street" value="三岔街道"></property>
+	</bean>
+	<!-- ================end================ -->
+	
+	<!-- bean配置：Map类型，id为addressMap，添加一个元素，key为1，value-ref为address1 -->
+	<!-- ===============begin=============== -->
+	  <bean id="addressMap" class="step1.Person">
+        <property name="addresses">
+            <map>
+                <entry key="1" value-ref="address1"/>
+            </map>
+        </property>
+      </bean>
+	<!-- ================end================ -->
+	
+	<!-- bean配置：Person类型，id为person，person的name属性值为"鲁班七号"，
+		 cars的列表中包含car1和car2两个元素，
+		 addresses属性值为上面的Map对象addressMap-->
+	<!-- ===============begin=============== -->
+	<bean id="person" class="step1.Person">
+        <property name="name" value="鲁班七号"/>
+        <property name="cars">
+            <list>
+                <ref bean="car1"/>
+                <ref bean="car2"/>
+            </list>
+        </property>
+          <property name="addresses" >
+            <map>
+                <entry key="1" value-ref="address1"></entry>
+            </map>
+        </property>
+    </bean>
+	<!-- ================end================ -->
+</beans>
+```
+
+####  第2关：自动装配、继承和依赖
+
+spring-apd.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- bean配置：Car类型，id为car，car的brand属性值为"大众"，price属性值为210000，speed属性值为60 -->
+	<!-- ===============begin=============== -->
+	<bean id="car" class="step2.Car">
+		<property name="brand" value="大众"></property>
+		<property name="price" value="210000"></property>
+		<property name="speed" value="60"></property>
+	</bean>
+	<!-- ================end================ -->
+	
+	<!-- bean配置：Car类型，id为car2，car2的属性值采用继承自car的方式注入，且要求brand属性值重新设置为"BMW"-->
+	<!-- ===============begin=============== -->
+        <bean id="car2" parent="car" class="step2.Car">
+            <property name="brand" value="BMW"></property>
+        </bean>
+	<!-- ================end================ -->
+	
+	<!-- bean配置：Address类型，id为address，address的city属性值为"Cangzhou"，street属性值为"Yingbin" -->
+	<!-- ===============begin=============== -->
+	<bean id="address" class="step2.Address">
+		<property name="city" value="Cangzhou"></property>
+		<property name="street" value="Yingbin"></property>
+	</bean>
+	<!-- ================end================ -->
+		
+	<!-- bean配置：Person类型，id为person，person的name属性值为"吕布"，
+		 car和address属性值使用byName进行自动装配-->
+	<!-- ===============begin=============== -->
+    <bean id="person" class="step2.Person" autowire="byName">
+        <property name="name" value="吕布"/>  
+    </bean>
+	<!-- ================end================ -->
+</beans>
+```
+
+Main.java
+
+```java
+package step2;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Main {
+	public static void main(String[] args) {
+		ApplicationContext cxt = new ClassPathXmlApplicationContext("spring-apd.xml");
+		
+		//获取id为person的对象，并输出显示
+		Person person = cxt.getBean("person",Person.class);
+		//输出显示person的各个属性值
+		//=====================begin======================
+		System.out.println("name:"+person.getName() );
+        System.out.println("car:"+person.getCar());
+        System.out.println("address:"+person.getAddress());
+		//======================end=======================
+	}
+}
+```
+
+#### 第3关：bean的作用域
+
+```java
+package step3;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Main {
+	public static void main(String[] args) {
+		//创建IoC容器时，会调用scope为sigleton的bean的无参构造方法，创建bean对象
+		ApplicationContext cxt = new ClassPathXmlApplicationContext("spring-scope.xml");
+		
+		//两次调用getBean获取id为car1的对象car11和car12，判定输出是不是同一个对象 car11==car12
+		//=====================begin======================
+		Car car11 = cxt.getBean("car1",Car.class);
+        Car car12 = cxt.getBean("car1",Car.class);
+        System.out.println("car11和car12是同一个对象？"+(car11==car12));
+		//======================end=======================
+		
+		//两次调用getBean获取id为car2的对象car21和car22，判定输出是不是同一个对象 car21==car22
+		//=====================begin======================
+		Car car21 = cxt.getBean("car2",Car.class);
+        Car car22 = cxt.getBean("car2",Car.class);
+        System.out.println("car21和car22是同一个对象？"+(car21==car22));
+		//======================end=======================
+	}
+}
+```
+
+#### 第4关：bean的生命周期
+
+spring-lifecycle.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- bean配置：Address类型，id为address,设置初始化方法为init和销毁方法为destroy;address的city属性值为"Beijing"，street属性值为"WangFuJing" -->
+	<!-- ===============begin=============== -->
+	<bean id="address" class="step4.Address" init-method="init" destroy-method="destroy"          >
+		<property name="city" value="Beijing"></property>
+		<property name="street" value="WangFuJing"></property>
+	</bean>
+	<!-- ================end================ -->		
+</beans>
+```
+
+Address.java
+
+```java
+package step4;
+
+public class Address {
+	private String city;
+	private String street;
+	public Address() {
+		System.out.println("1.Address constructor ……");
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+		System.out.println("2.setCity ……");
+	}
+	public String getStreet() {
+		return street;
+	}
+	public void setStreet(String street) {
+		this.street = street;
+		System.out.println("2.setStreet ……");
+	}
+	@Override
+	public String toString() {
+		return "Address [city=" + city + ", street=" + street + "]";
+	}
+	//Address初始化方法：输出“2.Address init ……”
+	//=================begin================
+	public void init(){
+        System.out.println("3.Address init ……");
+    }
+	//==================end=================
+	
+	//Address销毁方法：输出“4.Address destroy ……”
+	//=================begin================
+	public void destroy(){
+        System.out.print("4.Address destroy ……");
+    }
+	//==================end=================
+}
+```
+
+#### 第5关：基于注解的bean配置和装配
+
+spring-annotation.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- 组件扫描，扫描包为step5 -->
+	<!-- ===============begin=============== -->
+	<context:component-scan base-package="step5"/>
+	<!-- ================end================ -->
+</beans>
+```
+
+UserServiceImpl.java
+
+```java
+package step5;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+//添加service注解
+//=================begin====================
+@Service
+//==================end=====================
+public class UserServiceImpl {
+	//声明私有的、UserDaoImpl类型的属性userDaoImpl，并自动装配
+	//=================begin====================
+    @Autowired
+	private UserDaoImpl userDaoImpl;
+	//==================end=====================
+	@Override
+	public String toString() {
+		return "UserServiceImpl";
+	}	
+}
+```
 
 ## SSM—MyBatis部分
 
@@ -741,3 +1143,449 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 #### 第3关：association分步查询
 
 ## SSM—SpringMVC
+
+### SpringMVC—初体验
+
+#### 第1关：SpringMVC入门实例
+
+HelloHandler.java
+
+```java
+package handler;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+// 注解 @Controller 表示它是一个控制器
+@Controller
+// 表明当请求的URI在 /hello 下的时候才有该控制器响应
+@RequestMapping("/hello")
+public class HelloHandler {
+	// 表明当请求的URI是/sayhello的时候该方法才请求
+    @RequestMapping("/sayhello")
+	public String helloHandle(){
+		return "success";
+	}
+}
+//===============begin===============
+```
+
+web.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  	<servlet>
+    	<servlet-name>springMVC</servlet-name>
+    	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    	<load-on-startup>1</load-on-startup>
+  	</servlet>
+   	<!--########## Begin ##########-->
+    <!--拦截配置-->
+    <servlet-mapping>
+        <servlet-name>springMVC</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <!--########## End ##########-->
+</web-app>
+```
+
+springMVC-servlet.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	<!--组件扫描-->
+	<context:component-scan base-package="handler"></context:component-scan>
+
+	<!-- 视图解析器 -->
+	<!--########## begin ##########-->
+	<!--找到 Web 工程中的 /pages 文件夹，且文件结尾为 jsp 的文件作为映射 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--########## End ##########-->
+</beans>
+
+```
+
+### SpringMVC—URL
+
+#### 第1关：Ant风格的URL
+
+AntHandler.java
+
+```java
+package handler;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class AntHandler {
+	/*
+	 * @RequestMapping支持Ant风格的URL
+	 * 补全代码：使用注解@PathVariable将占位符uid映射到请求处理方法的形参id
+	 */
+	//==================begin===================
+	@RequestMapping("/user/{uid}")
+	public String testAnt(@PathVariable("uid")   Integer  id  ,Map<String,Object> map){
+		map.put("message", id);
+		return "success";
+	}
+	//===================end====================	
+}
+
+```
+
+#### 第2关：Restful风格的URL
+
+web.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<!-- 前端控制器 -->
+	<servlet>
+		<servlet-name>springmvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springmvc</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 请求方式过滤器配置 -->
+	<!--==================begin===================-->
+    <filter>
+        <filter-name>methodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>methodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+	<!--===================end====================-->
+</web-app>
+```
+
+RestHandler.java
+
+```java
+package handler;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class RestHandler {
+	/*
+	 * Restful风格的CRUD（增删改查），对应HTTP协议四种请求方式
+	 * get——获取资源  
+	 * post——新建资源  
+	 * put——更新资源  
+	 * delete——删除资源
+	 * 补全代码：去掉@RequestMapping注释，根据请求处理方法的提示，补充请求方式
+	 */
+	//==================begin===================
+	@RequestMapping(value="/user",method=RequestMethod.GET )
+	public String testRestfulGet(Map<String,Object> map){
+		map.put("message", "查询操作");
+		return "success";
+	}
+	
+	@RequestMapping(value="/user",method=RequestMethod.DELETE)
+	public String testRestfulDelete(Map<String,Object> map){
+		map.put("message", "删除操作");
+		return "success";
+	}
+	
+	@RequestMapping(value="/user" ,method=RequestMethod.PUT )
+	public String testRestfulPut(Map<String,Object> map){
+		map.put("message", "更新操作");
+		return "success";
+	}
+	
+	@RequestMapping(value="/user" ,method=RequestMethod.POST)
+	public String testRestfulPost(Map<String,Object> map){
+		map.put("message", "新增操作");
+		return "success";
+	}
+	//===================end====================		
+}
+```
+
+### SpringMVC—处理请求参数
+
+#### 第1关：ServletAPI
+
+ServletAPIHandler.java
+
+```JAVA
+package handler;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import bean.User;
+
+@Controller
+public class ServletAPIHandler {
+	/*
+	 * 请求参数的处理方式之一：原生的ServletAPI，如HttpServletRequest
+	 * 按要求补充代码
+	 */
+	//==================begin===================
+    @RequestMapping("/testServletAPI")
+    //1.在处理方法中添加形参，类型为HttpServletRequest，变量名为request
+    public String testServletAPI(Map<String,Object> map,HttpServletRequest request){
+        //2.方法内定义String类型的变量userStr，赋值为从request对象获取的参数名为"userinfo"的值
+        String userStr=request.getParameter("userinfo");
+        //3.map中添加元素，元素的key为message，元素的value为userStr
+        map.put("message",userStr);
+        return "success";
+    }
+    //===================end====================
+}
+
+```
+
+#### 第2关：@RequestParam
+
+RequestParamHandler.java
+
+```JAVA
+package handler;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import bean.User;
+
+@Controller
+public class RequestParamHandler {
+	/*
+	 * 请求参数的处理方式之二：使用注解@RequestParam，指定请求参数与请求处理方法的形参中对应
+	 * 按要求补充代码
+	 */
+	//==================begin===================
+    @RequestMapping("/testRequestParam")
+    //1.使用注解指定请求参数userName与形参name对应，userAge与形参age对应
+    public String testRequestParam(@RequestParam("userName")String name,@RequestParam("userAge")Integer age,Map<String,Object> map){
+        //2.方法内定义String类型的变量userStr，变量赋值为"username = " + name + ", age = " + age
+        String userStr="username = " + name + ", age = " + age;
+        //3.map中添加元素，元素key为message，元素的value为userStr
+        map.put("message",userStr);
+        return "success";
+    }
+	//===================end====================	
+}
+```
+
+#### 第3关：POJO
+
+POJOHandler.java
+
+```java
+package handler;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import bean.User;
+
+@Controller
+public class POJOHandler {
+	/*
+	 * 请求参数的处理方式之三：POJO，请求参数与User的属性对应
+	 * 根据要求将代码补充完整
+	 */
+	//==================begin===================
+    @RequestMapping("/testPOJO")
+    //1.testPOJO处理方法添加User类型形参user，接收请求参数
+    public String testPOJO(Map<String,Object> map,User user){
+        //2.方法内，定义String类型变量userStr，值为user的toString方法的返回值
+        String userStr=user.toString();
+        // 3.在map中添加元素，元素的key为message，元素的value为userStr
+        map.put("message",userStr);
+        return "success";
+    }
+	//===================end====================
+}
+```
+
+### SpringMVC—处理模型数据
+
+#### 第1关：ModelAndView
+
+```java
+package handler;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class ModelAndViewHandler {
+	/*
+	 * 处理模型数据方法一：ModelAndView
+	 * 	1 setViewName方法 —— 设置视图
+	 *  2 addObject方法 —— 设置返回数据
+	 * 根据要求补全下面代码
+	 */
+	//==================begin===================
+    @RequestMapping("/testModelAndView")
+    public ModelAndView testModelAndView(){
+        ModelAndView mav = new ModelAndView();
+        //1.使用setViewName方法设置视图为“success”
+        mav.setViewName("success");
+        //2.使用addObject方法，保存一个返回数据，key为“message”，value为“testModelAndView”
+        mav.addObject("message", "testModelAndView");
+        return mav;
+    }
+	//===================end====================
+}
+```
+
+#### 第2关：Model
+
+ModelHandler.java
+
+```java
+package handler;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class ModelHandler {
+	/*
+	 * 处理模型数据方法二：Model
+	 * 根据要求补全下面代码
+	 */
+	//==================begin===================
+    @RequestMapping("/testModel")
+    //1.在处理方法中添加Model类型形参，变量名为model
+    public String testModel(Model model ){
+        //2.model中调用addAttribute方法添加返回信息，key值为"message",value值为"testModel"
+        model.addAttribute("message","testModel");
+        return "success";
+    }
+	//===================end====================
+}
+```
+
+#### 第3关：Map
+
+MapHandler.java
+
+```java
+package handler;
+
+import java.util.Map;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class MapHandler {
+	/*
+	 * 处理模型数据方法三：Map
+	 * 根据要求补全下面代码
+	 */
+	//==================begin===================
+    @RequestMapping("/testMap")
+    //1.在处理方法中添加Map<String,Object>类型形参，变量名为map
+    public String testMap(Map<String,Object> map ){
+        //2.map中添加返回信息元素，key值为"message",value值为"testMap"
+        map.put("message", "testMap");
+        return "success";
+    }
+	//===================end====================	
+}
+```
+
+#### 第4关：@ModelAttribute
+
+ModelAttributeHandler.java
+
+```java
+package handler;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import bean.User;
+
+@Controller
+public class ModelAttributeHandler {
+	
+	/*
+	 * @ModelAttribute：实现User的部分信息修改，其它信息保持不变。 
+	 * 根据要求补全下面代码
+	 */
+	//==================begin===================
+    //1.添加@ModelAttribute注解
+    @ModelAttribute
+    public void getUser(Map<String,Object> map){
+        User user = new User();
+        //2.设置user的userId为1100112，userName为"Jenny"，userAge为30
+        user.setUserId(1100112);
+        user.setUserName("Jenny");
+        user.setUserAge(30);
+        map.put("user",user);
+    }
+
+    @RequestMapping("/testModelAttribute")
+    //3.方法中增加User类型的形参，变量名为user
+    public String testModelAttribute(User user,Map<String,Object> map){
+        //4.方法内，定义String类型变量userStr，值为User类型形参调用toString方法的返回值
+        String userStr=user.toString();
+        //5.在map中添加元素，元素的key为"message"，元素的value为userStr
+        map.put("message",userStr);
+        return "success";
+    }
+	//===================end====================
+}
+```
+
